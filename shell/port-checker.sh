@@ -1,6 +1,7 @@
 #!/bin/bash
 # author: darm
 # title: port checker (memeriksa port pada host bca mc2)
+# requirement: install netcat terlebih dahulu pada server jika belum ada
 
 # menentukan server, defaultnya set ke localhost
 # silakan diubah jika ingin menembak host lain
