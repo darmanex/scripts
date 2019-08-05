@@ -8,14 +8,27 @@
 SERVER=$HOSTNAME
 PORTDIR=/var/log/port-checker
 CURDATE=$(date)
-LOGFILE=$CURDIR/port-checker.log
+LOGFILE=$PORTDIR/port-checker.log
 
+# cek hak akses
+if [[ $EUID -ne 0 ]]; then
+   echo "WARNING!!! This script must be run as root!" 
+   exit 1
+fi
 
-clear
+# cek sistem
+host=$(uname | tr 'A-Z' 'a-z')
+if [ $host = "darwin" ] || [ $host = "linux" ]; then
+	clear
+    echo "Machine: $host"
+else
+	echo "Sorry, only support for Mac OS X and Linux."
+	exit 1
+fi
+
 echo "Checking open port for $SERVER"
 echo "Please wait a second ..."
 sleep 0
-
 
 add_log()
 {
@@ -49,9 +62,9 @@ do
     nc -z -w5 $SERVER $PORT
 
     if [ "$?" -eq 0 ]; then
-        echo "[✔] Server $SERVER on port $PORT - Open" #>> $LOGFILE
+        echo "[✔] Server $SERVER on port $PORT - Open"
     else
-        echo "[X] Server $SERVER on port $PORT - Closed" #>> $LOGFILE
+        echo "[X] Server $SERVER on port $PORT - Closed"
     fi
 
 
