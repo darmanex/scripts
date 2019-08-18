@@ -4,7 +4,7 @@
 # to the host server
 #
 
-echo "Backing up MC2 WEB started. Please wait a minute..."
+echo "Backing up MC2 Web is started. Please wait a minute..."
 RESULT=$?
 BACKUPTIME=`date +%Y-%m-%d`
 
