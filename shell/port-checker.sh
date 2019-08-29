@@ -6,9 +6,9 @@
 # menentukan server, defaultnya set ke localhost
 # silakan diubah jika ingin menembak host lain
 SERVER=$HOSTNAME
-PORTDIR=/var/log/port-checker
+LOGDIR=/var/log/port-checker
 CURDATE=$(date)
-LOGFILE=$PORTDIR/port-checker.log
+LOGFILE=$LOGDIR/port-checker.log
 
 # cek hak akses
 if [[ $EUID -ne 0 ]]; then
@@ -26,13 +26,14 @@ else
 	exit 1
 fi
 
+clear
 echo "Checking open port for $SERVER"
 echo "Please wait a second ..."
 sleep 0
 
 add_log()
 {
-    mkdir -p $PORTDIR && cd $PORTDIR && touch $LOGFILE
+    mkdir -p $LOGDIR && cd $LOGDIR && touch $LOGFILE
 }
 
 # list port yang akan di cek
@@ -46,12 +47,12 @@ declare -a SERVICES=(
     "4171 (nsqadmin)"
     "5577 (messaging)"
     "5588 (messaging)"
-    "9160 (Cassandra)"
-    "8181 (S3-Cassandra)"
-    "9200 (Elasticsearch)"
-    "9300 (Elasticsearch)"
+    "9160 (cassandra)"
+    "8181 (s3-Cassandra)"
+    "9200 (elasticsearch)"
+    "9300 (elasticsearch)"
     "7199 (JMX)"
-    "9042 (CQWL)"
+    "9042 (CQL)"
 )
 
 IFS=""
@@ -62,11 +63,10 @@ do
     nc -z -w5 $SERVER $PORT
 
     if [ "$?" -eq 0 ]; then
-        echo "[✔] Server $SERVER on port $PORT - Open"
+        echo "[✔] Server $SERVER on port $PORT - Open" 2>&1 | tee -a $LOGFILE
     else
-        echo "[X] Server $SERVER on port $PORT - Closed"
+        echo "[X] Server $SERVER on port $PORT - Closed" 2>&1 | tee -a $LOGFILE
     fi
-
 
 done 2>/dev/null
 
@@ -74,6 +74,6 @@ add_log
 
 echo "Last checked at $CURDATE" >> $LOGFILE
 
-echo "Logs saved in $PORTDIR"
+echo "Logs saved in $LOGDIR"
 
 echo "Checking port done!"
