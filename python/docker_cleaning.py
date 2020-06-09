@@ -9,7 +9,7 @@ import os
 print("Cleaning containers exited status and docker none images are proccesing..")
 os.system('sleep 2')
 
-exited_containers= os.system('docker ps -a -q -f "status=exited"')
+exited_containers = os.system('docker ps -a -q -f "status=exited"')
 none_images = os.system("docker images | grep '^<none>' | awk '{print $3}'")
 
 if exited_containers == True:
