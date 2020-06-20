@@ -20,4 +20,4 @@ elif none_images == True:
     subprocess.run('docker rmi', none_images)
     print("[+] Cleanup images that have none status...")
 else:
-    print("You're system is clean. No containers exited and none images that must clean on your system!")
+    print("Your system is clean. Have no containers exited and none images!")
