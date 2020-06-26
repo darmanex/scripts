@@ -1,22 +1,23 @@
 #!/usr/bin/python3
 
 # Description:
-# this script it uses to cleanup docker images and containers on Aino servers (dev, staging, sandbox)
+# this script it uses to clean up docker images and containers on Aino servers (dev, staging, sandbox)
 # better to execute this script via cronjob
 
-import os
+import subprocess
+import time
 
-print("Cleaning containers exited status and docker none images are proccesing..")
-os.system('sleep 2')
+print("Cleaning containers exited status and docker none images are processing..")
+time.sleep(1)
 
-exited_containers= os.system('docker ps -a -q -f "status=exited"')
-none_images = os.system("docker images | grep '^<none>' | awk '{print $3}'")
+exited_containers = subprocess.run('docker ps -a -q -f "status=exited"', shell=True)
+none_images = subprocess.run("docker images | grep '^<none>' | awk '{print $3}'", shell=True)
 
 if exited_containers == True:
-    os.system('docker rm $exited_containers')
+    subprocess.run('docker rm', exited_containers)
     print("[+] Cleanup containers that have exited status...")
 elif none_images == True:
-    os.system('docker rmi $none_images')
+    subprocess.run('docker rmi', none_images)
     print("[+] Cleanup images that have none status...")
 else:
-    print("All done. No containers exited and none images on your system!")
+    print("Your system is clean. Have no containers exited and none images!")
