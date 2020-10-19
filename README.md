@@ -1,2 +1,2 @@
 # scripts
-List of scripts and configs for administration and so on.
+My collection of scripts and configs for administration, etc.
