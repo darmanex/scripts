@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# This script is for pruning images on OKD (Openshift) master node
+# To make this script automated execution, please put on cronjob
+# eg: execute at 00:00 on day-of-month 1
+# 0 0 1 * * /path/of_your_scripts/images-prune.sh
+#
+
+OKD_URL=https://okd-host-domain.com
+OKD_PORT=8443
+OKD_UNAME=okd_username
+OKD_PASS=okd_password
+LOGDIR=/root/logs
+CURDATE=$(date)
+LOGFILE=$LOGDIR/images-prune.log
+
+oc login $OKD_URL:$OKD_PORT -u=$OKD_UNAME -p=$OKD_PASS --insecure-skip-tls-verify
+
+oc adm prune images --keep-tag-revisions=3 --keep-younger-than=43200m --registry-url=https://docker-registry-default.okd-host-domain.com --confirm > $LOGFILE
+
+echo "Last checked at $CURDATE" >> $LOGFILE
